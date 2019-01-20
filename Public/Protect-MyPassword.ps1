@@ -17,7 +17,7 @@ function Protect-MyPassword {
     #return
     $SecurePassword = $Password | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
     if ($Output -eq 'File') {
-        if ($Path -ne '' -and (Test-Path $Path)) {
+        if ($Path -ne '') {
             $SecurePassword | Out-File -FilePath $Path
 
             $FullPath = Resolve-Path $Path
@@ -27,7 +27,7 @@ function Protect-MyPassword {
                 Write-Color -Text 'Protect-MyPassword', ' - ', "can't find file at ", $FullPath -Color Yellow, White, White, Yellow
             }
         } else {
-            Write-Color -Text 'Protect-MyPassword - File Path ', $Path, " doesn't exists. Terminating." -Color White, Red, White
+            Write-Color -Text 'Protect-MyPassword - File Path ', $Path, " is empty. Terminating." -Color White, Red, White
         }
     } elseif ($Output -eq 'Screen') {
         return $SecurePassword
