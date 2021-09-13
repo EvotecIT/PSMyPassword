@@ -14,3 +14,9 @@ Locale: en-US
 ### [Protect-MyPassword](Protect-MyPassword.md)
 {{Fill in the Synopsis}}
 
+### [Set-MyPassword](Set-MyPassword.md)
+Allows the user to change the password of the Active Directory account using PowerShell, including when the password is expired.
+
+### [Test-MyPassword](Test-MyPassword.md)
+{{ Fill in the Synopsis }}
+
