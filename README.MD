@@ -20,6 +20,28 @@
 
 # PSMyPassword - PowerShell Module
 
+This little PowerShell module provides a simple way to change password of any user account if you know it. This is very useful for situations when you can't login to RDP
+
+
+With this command you can change password of any user account, as long as you have password. The account can be service account and expired.
+
+```powershell
+Set-MyPassword -UserName 'test'
+```
+
+With this command you can encrypt the password for use within a script.
+
+```powershell
+Protect-MyPassword -UserName 'test'
+```
+
+With this command you can test if given login and password are valid.
+
+```powershell
+Test-MyPassword
+```
+
+Blog post describing use cases: https://evotec.xyz/how-to-change-your-own-expired-password-when-you-cant-login-to-rdp/
 
 ## Installing
 
