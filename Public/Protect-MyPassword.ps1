@@ -1,8 +1,11 @@
 function Protect-MyPassword {
+    [cmdletBinding(DefaultParameterSetName = 'SecurePassword')]
     param (
-        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $false)][string] $UserName,
-        [Parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $false)][string] $Password,
-        [Parameter(Position = 2, Mandatory = $true, ValueFromPipeline = $false)][alias('FilePath')][string] $Path,
+        # [Parameter(Position = 0, Mandatory = $false, ValueFromPipeline = $false)][string] $UserName = 'ThisIsNotImportant',
+
+        [Parameter(ParameterSetName = 'SecurePassword')][securestring] $Password,
+        [Parameter(ParameterSetName = 'PlainTextPassword')][string] $PlainTextPassword,
+        [Parameter()][alias('FilePath')][string] $Path,
         [validateset("File", 'Screen')][string] $Output = 'Screen',
         [string] $AsUserName,
         [string] $AsPassword
@@ -15,7 +18,28 @@ function Protect-MyPassword {
     #    }
     #}
     #return
-    $SecurePassword = $Password | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
+    <#
+    if (-not $Password) {
+        if ($UserName) {
+            $SecureCredentials = Get-Credential -UserName $UserName -Message 'Please enter password to secure'
+        } else {
+            $SecureCredentials = Get-Credential -Message 'Please enter password to secure'
+        }
+        $SecurePassword = $SecureCredentials.Password | ConvertFrom-SecureString
+    } else {
+        $SecurePassword = $Password | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
+    }
+    #>
+    if ($PlainTextPassword) {
+        $SecurePassword = $PlainTextPassword | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
+    } elseif ($Password) {
+        $SecurePassword = $Password | ConvertFrom-SecureString
+    } else {
+        Write-Color -Text "Please provide password you want to encrypt: " -Color Yellow -NoNewLine
+        $Password = Read-Host -AsSecureString
+        $SecurePassword = $Password | ConvertFrom-SecureString
+    }
+
     if ($Output -eq 'File') {
         if ($Path -ne '') {
             $SecurePassword | Out-File -FilePath $Path
